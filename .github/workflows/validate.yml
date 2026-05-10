@@ -1,0 +1,37 @@
+name: Validate & Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Compile check all Python scripts
+        run: |
+          for f in scripts/*.py scripts/tests/*.py; do
+            python -m py_compile "$f"
+          done
+          echo "All Python scripts compile OK"
+
+      - name: Router tests
+        run: python3 -m unittest router.tests.test_router -v
+
+      - name: Pipeline E2E tests
+        run: python3 scripts/tests/test_pipeline.py -v
+
+      - name: Validate repo governance
+        run: python3 scripts/validate_repo.py

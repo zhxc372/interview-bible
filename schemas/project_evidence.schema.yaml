@@ -1,0 +1,33 @@
+# Project Evidence Schema
+# 每个项目卡的 project_evidence.md 必须包含以下字段
+
+required_fields:
+  - field: evidence_level
+    type: string
+    enum: [L0_none, L1_personal_demo, L2_opensource_contribution, L3_team_project, L4_production_lead]
+    description: "证据等级，决定claim_allowed上限"
+
+  - field: claim_allowed
+    type: string
+    enum: [了解, 做过demo验证, 提交过PR或修复过问题, 参与过落地, 负责或主导过]
+    description: "允许的最高表达强度"
+
+  - field: evidence_anchors
+    type: list
+    item_type: object
+    description: "证据锚点列表"
+    item_fields:
+      - field: type
+        enum: [repo, commit, PR, test_log, screenshot, demo_link, design_doc, benchmark, README, other]
+      - field: url_or_path
+        type: string
+      - field: description
+        type: string
+
+validation_rules:
+  - evidence_level L0_none → claim_allowed 必须 ≤ "了解"
+  - evidence_level L1_personal_demo → claim_allowed 必须 ≤ "做过demo验证"
+  - evidence_level L2_opensource_contribution → claim_allowed 必须 ≤ "提交过PR或修复过问题"
+  - evidence_level L3_team_project → claim_allowed 必须 ≤ "参与过落地"
+  - evidence_level L4_production_lead → claim_allowed ≤ "负责或主导过"
+  - evidence_anchors 不能为空（L0除外）

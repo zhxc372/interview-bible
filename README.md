@@ -38,7 +38,7 @@ JD输入
   → PDF（可打印）
 ```
 
-**硬约束：PDF只能从标准session产物生成，Agent不能绕过流水线。**
+**硬约束：PDF只能从通过validate的标准session生成（Level 3脚本保证），Agent不能直接跳过流水线。**
 
 ---
 
@@ -67,7 +67,15 @@ interview-bible/
 │   ├── route_rules.yaml        # 路由规则
 │   └── tests/test_router.py    # Router测试（29个）
 ├── scripts/
-│   ├── tests/test_pipeline.py   # Pipeline E2E测试（7个）
+│   ├── run_jd_to_handbook.py   # 总控脚本
+│   ├── validate_handbook.py    # 产物校验
+│   ├── build-book.py           # Markdown书籍生成
+│   ├── build-pdf-v2.py         # weasyprint PDF生成
+│   ├── build_context_pack.py
+│   ├── build_markdown_pack.py
+│   ├── check_context_budget.py
+│   ├── validate_repo.py        # 治理文件校验
+│   └── tests/test_pipeline.py   # Pipeline E2E测试（7个）
 ├── prompts/                    # 8个Prompt（00-07）
 │   ├── 00-mode-router.prompt.md
 │   ├── 01-full-knowledge-map.prompt.md
@@ -77,14 +85,6 @@ interview-bible/
 │   ├── 05-project-card.prompt.md
 │   ├── 06-pressure-q.prompt.md
 │   └── 07-quiz-card.prompt.md
-├── scripts/
-│   ├── run_jd_to_handbook.py   # 总控脚本
-│   ├── validate_handbook.py    # 产物校验
-│   ├── build-book.py           # Markdown书籍生成
-│   ├── build-pdf-v2.py         # weasyprint PDF生成
-│   ├── build_context_pack.py
-│   ├── build_markdown_pack.py
-│   └── check_context_budget.py
 ├── templates/                  # 输出模板
 ├── legacy/                     # 已废弃的文件
 ├── examples/
@@ -144,7 +144,7 @@ python3 scripts/tests/test_pipeline.py -v
 ```text
 1. 面试要证据。无证据不生成项目卡。
 2. PDF只能从标准session产物生成，build-pdf-v2默认强制校验。
-3. Agent不能绕过流水线——工程上不可绕过（测试保证）。
+3. Agent不能绕过流水线——build-pdf-v2默认强制校验（--force需环境变量二次确认）。
 4. 项目故事不能编。没有真实项目就用"理论推演"。
 5. 搞清楚 → 讲清楚 → 验证清楚。
 ```

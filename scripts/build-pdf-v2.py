@@ -270,8 +270,15 @@ def main(argv: list[str] | None = None) -> int:
     pdf_dir = os.path.join(session_dir, "pdf")
     os.makedirs(pdf_dir, exist_ok=True)
 
-    # 强制校验（除非--force）
-    if not args.force:
+    # 强制校验（除非--force且环境变量确认）
+    if args.force:
+        import os as _os
+        if not _os.environ.get("INTERVIEW_BIBLE_ALLOW_FORCE"):
+            print("❌ --force 需要 INTERVIEW_BIBLE_ALLOW_FORCE=1 环境变量确认")
+            print("   用法：INTERVIEW_BIBLE_ALLOW_FORCE=1 python3 scripts/build-pdf-v2.py --session xxx --force")
+            return 1
+        print("⚠️ 警告：已跳过校验（INTERVIEW_BIBLE_ALLOW_FORCE=1）")
+    else:
         sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
         from validate_handbook import validate_session
         errors = validate_session(args.session)

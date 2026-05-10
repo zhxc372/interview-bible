@@ -80,6 +80,65 @@ def check_no_fake_project_stories(dir_path: str, errors: list):
                         )
 
 
+def check_project_evidence(session_dir: str, errors: list):
+    """检查项目卡的 evidence_level 和 claim_allowed 一致性"""
+    cards_dir = os.path.join(session_dir, "cards")
+    if not os.path.exists(cards_dir):
+        return
+
+    for topic_dir_name in os.listdir(cards_dir):
+        topic_dir = os.path.join(cards_dir, topic_dir_name)
+        if not os.path.isdir(topic_dir):
+            continue
+
+        # 检查是否有项目卡
+        project_card = os.path.join(topic_dir, "project-card.md")
+        if not os.path.exists(project_card):
+            continue
+
+        evidence_path = os.path.join(topic_dir, "project_evidence.md")
+        if not os.path.exists(evidence_path):
+            errors.append(
+                f"❌ FAIL: {topic_dir_name}/ 有项目卡但缺少 project_evidence.md"
+            )
+            continue
+
+        with open(evidence_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # 检查 evidence_level
+        level_match = re.search(r"evidence_level[:\s]+(L\d+[_\w]*)", content)
+        if not level_match:
+            errors.append(
+                f"⚠️  WARN: {topic_dir_name}/project_evidence.md 缺少 evidence_level 字段"
+            )
+            continue
+
+        evidence_level = level_match.group(1)
+
+        # 检查 claim_allowed
+        claim_match = re.search(r"claim_allowed[:\s]+(.+)", content)
+        if not claim_match:
+            errors.append(
+                f"⚠️  WARN: {topic_dir_name}/project_evidence.md 缺少 claim_allowed 字段"
+            )
+            continue
+
+        claim = claim_match.group(1).strip()
+
+        # 校验 level 和 claim 一致性
+        level_order = {"L0_none": 0, "L1_personal_demo": 1, "L2_opensource_contribution": 2, "L3_team_project": 3, "L4_production_lead": 4}
+        claim_order = {"了解": 0, "做过demo验证": 1, "提交过PR或修复过问题": 2, "参与过落地": 3, "负责或主导过": 4}
+
+        level_val = level_order.get(evidence_level, -1)
+        claim_val = claim_order.get(claim, -1)
+
+        if level_val >= 0 and claim_val >= 0 and claim_val > level_val:
+            errors.append(
+                f"❌ FAIL: {topic_dir_name}/project_evidence.md claim_allowed ({claim}) 超过 evidence_level ({evidence_level}) 允许上限"
+            )
+
+
 def check_orphan_bullets(dir_path: str, errors: list):
     """检查Markdown中是否有孤立bullet"""
     for root, dirs, files in os.walk(dir_path):
@@ -159,6 +218,9 @@ def validate_session(session: str) -> list[str]:
 
     # 3. 检查无证据项目故事
     check_no_fake_project_stories(session_dir, errors)
+
+    # 3.5. 检查项目证据字段一致性
+    check_project_evidence(session_dir, errors)
 
     # 4. 检查孤立bullet
     check_orphan_bullets(session_dir, errors)
