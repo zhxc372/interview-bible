@@ -117,7 +117,7 @@ chmod +x router/ls-router.sh
 python3 -m unittest router.tests.test_router
 ```
 
-当前 16 个测试全部通过。
+当前 19 个测试全部通过。
 
 ---
 
@@ -133,6 +133,38 @@ Router 先拦截再生成，5 种拦截场景：
 | `missing_evidence` | 强成果表述 + 无证据锚点 |
 | `coding_agent_disabled_in_mvp` | 请求自动代码扫描 |
 | `subtype_unclear` | 命中 interview_bible 但不知道要哪种卡 |
+
+---
+
+## Context Optimization
+
+v0.4 引入 Context Pack（编译中间层）+ State Persistence（状态持久化）。
+
+**最小上下文原则**：原始JD只进入JD Intake阶段，后续任务只读压缩后的context_pack.yaml。
+
+**状态持久化**：每个session的进度写入state.yaml，中断后说"继续"即可恢复。
+
+**Map-Reduce生成**：逐个知识点生成卡片（Map），最后用脚本拼接成Markdown包（Reduce）。
+
+```text
+JD → Context Pack → 逐Topic生成卡片 → 脚本拼接 → Markdown包
+```
+
+### 脚本工具
+
+```bash
+# 生成context pack
+python3 scripts/build_context_pack.py --session <session_id>
+
+# 恢复最新session
+python3 scripts/build_context_pack.py --session <session_id> --resume
+
+# 生成Markdown包（完整版/速记版/自测版）
+python3 scripts/build_markdown_pack.py --session <session_id>
+
+# 检查context budget
+python3 scripts/check_context_budget.py --session <session_id>
+```
 
 ---
 
@@ -175,3 +207,4 @@ Router 先拦截再生成，5 种拦截场景：
 | v0.1 | 2026-05-10 | MVP 初始版本：Router + 知识卡 + 项目卡 + 压力追问 |
 | v0.2 | 2026-05-10 | 双卡结构：知识点卡(搞清楚) + 面试卡(讲清楚)，13个测试 |
 | v0.3 | 2026-05-10 | JD Intake：JD解构卡 + 12类科目分类法 + 知识点Backlog，16个测试 |
+| v0.4 | 2026-05-10 | Context Pack + State Persistence + Markdown Pack生成器，19个测试 |

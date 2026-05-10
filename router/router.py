@@ -189,8 +189,8 @@ def match_routes(text: str, rules: Dict[str, Any]) -> List[str]:
 
 def match_subtype(text: str, rules: Dict[str, Any]) -> str | None:
     subtypes = rules.get("subtypes", {}) or {}
-    # Priority matters: jd_intake > explicit pressure request > knowledge point > interview card > project card.
-    for subtype in ("jd_intake", "pressure_question", "knowledge_point_card", "interview_card", "project_card"):
+    # Priority: jd_intake > session_resume > pressure > knowledge_point > interview > project
+    for subtype in ("jd_intake", "session_resume", "pressure_question", "knowledge_point_card", "interview_card", "project_card"):
         cfg = subtypes.get(subtype, {})
         kws = cfg.get("keywords", []) if isinstance(cfg, dict) else []
         if contains_any(text, kws):
@@ -201,6 +201,7 @@ def match_subtype(text: str, rules: Dict[str, Any]) -> str | None:
 def prompt_path_for(subtype: str | None) -> str:
     mapping = {
         "jd_intake": "prompts/00-jd-intake.prompt.md",
+        "session_resume": "读取 exports/ 下最新 state.yaml 恢复进度",
         "knowledge_point_card": "prompts/01-knowledge-point-card.prompt.md",
         "interview_card": "prompts/02-interview-card.prompt.md",
         "project_card": "prompts/03-project-card.prompt.md",

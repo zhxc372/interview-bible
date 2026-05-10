@@ -1,0 +1,10 @@
+budget:
+  jd_intake_max_chars: 20000
+  topic_card_max_chars: 8000
+  pressure_q_max_chars: 6000
+  final_pack_max_chars: 50000
+
+rules:
+  forbid_raw_jd_in_topic_generation: true
+  forbid_full_project_in_topic_generation: true
+  max_topics_per_prompt: 1

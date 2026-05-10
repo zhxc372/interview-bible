@@ -75,6 +75,26 @@ class TestInterviewBibleRouter(unittest.TestCase):
         self.assertEqual(d["route"], "interview_bible")
         self.assertEqual(d["subtype"], "jd_intake")
 
+    # --- Session Resume ---
+
+    def test_session_resume_routes_correctly(self):
+        d = decide("继续上次那个面试准备", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "session_resume")
+
+    def test_session_resume_progress_keyword(self):
+        d = decide("帮我看看进度", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "session_resume")
+
+    def test_session_resume_next_keyword(self):
+        d = decide("下一个知识点", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "session_resume")
+
     # --- Pressure Question ---
 
     def test_pressure_question_routes_correctly(self):

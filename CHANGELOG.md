@@ -35,7 +35,16 @@
 - Router新增subtype: knowledge_point_card / interview_card
 - 13个单元测试
 
-## v0.3 - JD Intake (进行中)
+## v0.3 - JD Intake (2026-05-10)
 
 新增JD入口，输出备考地图。
 详见 `PRD-v0.3.md`。
+
+## v0.4 - Context Optimization + State Persistence (2026-05-10)
+
+- Context Pack（编译中间层）—— JD压缩成context_pack.yaml，后续任务不读原始JD
+- State Persistence —— state.yaml记录进度，中断后可恢复
+- Markdown Pack生成器 —— 完整版/速记版/自测版
+- Context Budget检查器
+- Router新增session_resume subtype
+- 19个单元测试全部通过

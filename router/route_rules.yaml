@@ -32,6 +32,11 @@ routes:
       - 根据岗位准备
       - 拆解
       - 分析
+      - 继续
+      - 恢复
+      - 接着来
+      - 进度
+      - 下一个
 
   ai_classroom:
     keywords:
@@ -127,6 +132,17 @@ subtypes:
       - 根据岗位准备
       - 拆解JD
       - 分析JD
+
+  session_resume:
+    keywords:
+      - 继续
+      - 恢复
+      - 接着来
+      - 上次做到哪了
+      - 进度
+      - 还差什么
+      - 下一个
+      - 继续 prepare
 
   pressure_question:
     keywords:

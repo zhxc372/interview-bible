@@ -26,6 +26,7 @@ Core rules:
 Use this skill when the user asks for any of the following:
 
 - JD输入 / 岗位描述 / 招聘要求 → **JD解构卡**
+- 继续 / 恢复 / 进度 / 下一个 → **会话恢复**
 - 搞懂 / 搞清楚 / 梳理 / 分清 / 学明白一个知识点 → **知识点卡**
 - 面试怎么讲 / 2分钟讲清 / 帮我准备回答 → **面试卡**
 - 项目表达卡 / 项目复盘 → **项目卡**
@@ -51,11 +52,13 @@ Do not use this skill for:
 1. Route first.
 2. If blocked, return the blocker and ask for the next valid action.
 3. If routed to jd intake, use `prompts/00-jd-intake.prompt.md`.
-4. If routed to knowledge point card, use `prompts/01-knowledge-point-card.prompt.md`.
-5. If routed to interview card, use `prompts/02-interview-card.prompt.md`.
-6. If routed to project card, use `prompts/03-project-card.prompt.md`.
-7. If routed to pressure question, use `prompts/04-pressure-q.prompt.md`.
-8. Every output must include a validation action and a stop condition.
+4. If routed to session resume, read `exports/` state.yaml to restore progress.
+5. If routed to knowledge point card, use `prompts/01-knowledge-point-card.prompt.md`.
+6. If routed to interview card, use `prompts/02-interview-card.prompt.md`.
+7. If routed to project card, use `prompts/03-project-card.prompt.md`.
+8. If routed to pressure question, use `prompts/04-pressure-q.prompt.md`.
+9. Every output must include a validation action and a stop condition.
+10. After generating a card, update `state.yaml` progress.
 
 Suggested local router command:
 
