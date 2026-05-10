@@ -102,21 +102,24 @@ interview-bible/
 
 ## 快速使用
 
+> ⚠️ **本流程不是一键自动化。** Agent 负责生成内容（JD分析、卡片生成），scripts 负责初始化、校验、拼接、导出。build_context_pack.py 当前由 Agent 在 session 中填充，不是脚本自动生成。
+
 ```bash
-# 1. 初始化session
+# 1. 初始化session（创建目录结构）
 python3 scripts/run_jd_to_handbook.py --jd examples/sample-go-backend-jd.md --session my-interview --mode interview
 
-# 2. Agent执行JD Intake → 填充context_pack.yaml + topic_backlog.yaml
+# 2. Agent执行JD Intake → 手动填充context_pack.yaml + topic_backlog.yaml
+#    （当前阶段：Agent生成内容，人工确认后写入）
 
 # 3. Agent逐个生成卡片到 cards/ 目录
 
-# 4. 校验产物
+# 4. 校验产物（Level 3: 自动校验脚本）
 python3 scripts/validate_handbook.py --session my-interview
 
-# 5. 生成Markdown
+# 5. 生成Markdown（Level 3: 自动拼接脚本）
 python3 scripts/build-book.py --session my-interview
 
-# 6. 生成PDF
+# 6. 生成PDF（只能从通过validate的标准session生成）
 python3 scripts/build-pdf-v2.py --session my-interview
 ```
 
@@ -147,6 +150,46 @@ python3 scripts/tests/test_pipeline.py -v
 ```
 
 **以上铁律来源于 [PROJECT_CONSTITUTION.md](PROJECT_CONSTITUTION.md)。宪法是最高约束，任何prompt/route/export不能违反。**
+
+---
+
+## v0.6.x 冻结范围
+
+v0.6.x 只做 **Skill + CLI Artifact Compiler**：
+
+- ✅ Router、Prompt、Template
+- ✅ Artifact Contract、Validate
+- ✅ Markdown/PDF Export
+
+不做：
+- ❌ Web UI
+- ❌ 账户系统
+- ❌ 在线模拟面试
+- ❌ 简历优化平台
+- ❌ 题库平台
+
+---
+
+## 支持等级
+
+| 能力 | 等级 | 说明 |
+|------|------|------|
+| Router关键词路由 | Level 4 | 有单元测试（29个） |
+| Pipeline E2E | Level 4 | 有端到端测试（7个） |
+| 项目卡证据闸门 | Level 4 | Router硬拦截+测试 |
+| PDF导出 | Level 3 | 有脚本，需手动跑 |
+| Markdown书籍生成 | Level 3 | 有脚本，需手动跑 |
+| JD Intake | Level 2 | Agent生成+人工确认 |
+| Context Pack | Level 2 | Agent填充，非自动 |
+| 卡片生成 | Level 1 | Agent对话式，无自动化 |
+
+**等级定义：**
+- Level 0: 文档建议
+- Level 1: 可手动复制使用
+- Level 2: 有入口文件/适配文件
+- Level 3: 有自动校验脚本
+- Level 4: 有真实端到端测试
+- Level 5: 有release包+安装命令+回归测试
 
 ---
 

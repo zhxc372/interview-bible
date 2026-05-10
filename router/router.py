@@ -179,10 +179,16 @@ def matched_keys(text: str, keywords: List[str]) -> List[str]:
 
 def match_routes(text: str, rules: Dict[str, Any]) -> List[str]:
     routes = rules.get("routes", {}) or {}
+    domain_kws = rules.get("domain_keywords", []) or []
+    action_kws = rules.get("action_keywords", []) or []
     matched: List[str] = []
     for route_name, route_cfg in routes.items():
         kws = route_cfg.get("keywords", []) if isinstance(route_cfg, dict) else []
-        if contains_any(text, kws):
+        if route_name == "interview_bible" and domain_kws and action_kws:
+            # P1: interview_bible requires both domain + action anchor hit
+            if contains_any(text, domain_kws) and contains_any(text, action_kws):
+                matched.append(route_name)
+        elif contains_any(text, kws):
             matched.append(route_name)
     return matched
 
@@ -265,6 +271,7 @@ def decide(text: str, rules: Dict[str, Any] | None = None) -> RouteDecision:
     has_risky = contains_any(text, risky_words)
     has_evidence = contains_any(text, evidence_words)
 
+    # P0: risky claims without evidence → always block
     if route == "interview_bible" and has_risky and not has_evidence:
         return RouteDecision(
             status="blocked",
@@ -284,6 +291,17 @@ def decide(text: str, rules: Dict[str, Any] | None = None) -> RouteDecision:
             reason="subtype_unclear",
             message="⛔ 已识别为 Interview Bible，但未确定是知识卡、项目卡还是压力追问。",
             next_action="请选择：knowledge_card / project_card / pressure_question。",
+        )
+
+    # P0: project_card requires evidence_anchor (hard gate)
+    if route == "interview_bible" and subtype == "project_card" and not has_evidence:
+        return RouteDecision(
+            status="blocked",
+            route=route,
+            subtype="evidence_gap",
+            reason="project_card_missing_evidence",
+            message="⛔ 项目卡需要证据锚点（repo / commit / PR / test log / screenshot / demo link / design doc 之一）。无证据时只能生成：证据缺口报告 / 理论推演项目卡 / 个人实验卡。",
+            next_action="提供至少一个证据锚点，或改用【理论推演】/【个人实验】标签。",
         )
 
     return RouteDecision(
