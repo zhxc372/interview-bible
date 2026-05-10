@@ -1,0 +1,8 @@
+{
+  "status": "blocked",
+  "route": "interview_bible",
+  "subtype": "evidence_gap",
+  "reason": "missing_evidence",
+  "message": "⛔ 当前描述包含强成果表述，但缺少证据锚点。请提供代码、日志、commit、PR、压测、截图或 Demo。否则只能生成【练习表达卡】或【证据缺口清单】。",
+  "next_action": "补充证据，或降级为【个人实验】练习表达卡 / 证据缺口清单。"
+}

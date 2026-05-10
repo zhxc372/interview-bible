@@ -1,0 +1,126 @@
+routes:
+  interview_bible:
+    keywords:
+      - 面试
+      - 项目表达
+      - 项目复盘
+      - 答辩
+      - 追问
+      - 八股
+      - 知识卡
+      - 项目卡
+      - 技术分享
+      - 讲清楚
+      - 包装
+      - 表达卡
+
+  ai_classroom:
+    keywords:
+      - 教材
+      - 考纲
+      - 题库
+      - 错题
+      - 复述
+      - 做题
+      - 批改
+      - 学会
+      - 课堂
+      - 学习
+
+  expert_explorer:
+    keywords:
+      - 陌生领域
+      - roadmap
+      - Roadmap
+      - 路线图
+      - 建图
+      - 探索
+      - 专家
+      - 枢纽节点
+      - 研究
+
+  coding_agent:
+    keywords:
+      - 扫描代码
+      - 扫描
+      - 扫描仓库
+      - 分析源码
+      - 读取仓库
+      - 提取 commit
+      - 提取 PR
+      - 提取 diff
+      - 提取项目证据
+      - 跑测试
+      - 自动代码扫描
+      - 代码扫描
+      - 仓库扫描
+
+subtypes:
+  knowledge_card:
+    keywords:
+      - 知识卡
+      - 知识点
+      - 八股
+      - 机制
+      - 原理
+      - 概念
+
+  project_card:
+    keywords:
+      - 项目卡
+      - 项目表达
+      - 项目复盘
+      - 项目经历
+      - 个人实验
+      - Demo
+      - demo
+      - 开源
+      - 课程作业
+      - 包装
+      - 项目
+
+  pressure_question:
+    keywords:
+      - 压力追问
+      - 追问
+      - 模拟追问
+      - 问我
+
+risky_claims:
+  - 大幅提升
+  - 显著优化
+  - 高并发
+  - 性能提升
+  - 稳定性提升
+  - 成本降低
+  - 线上事故
+  - 用户反馈
+  - 团队决策
+  - 负责架构
+  - 主导设计
+  - 业务指标
+  - 核心模块
+  - 系统重构
+
+evidence_words:
+  - 代码
+  - 日志
+  - commit
+  - Commit
+  - PR
+  - diff
+  - Diff
+  - 压测
+  - 截图
+  - Demo
+  - demo
+  - 仓库
+  - 测试结果
+  - 测试日志
+  - 配置
+  - 文档
+  - README
+  - readme
+
+fallback_action: manual_confirm
+coding_agent_enabled_in_mvp: false

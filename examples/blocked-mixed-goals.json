@@ -1,0 +1,11 @@
+{
+  "status": "blocked",
+  "reason": "mixed_goals",
+  "message": "⛔ 当前输入包含多个目标。本轮只能选择一个：面试表达 / 教材学习 / 陌生领域探索 / 代码证据提取。",
+  "next_action": "重新输入一个单一目标。",
+  "matched_routes": [
+    "interview_bible",
+    "ai_classroom",
+    "coding_agent"
+  ]
+}
