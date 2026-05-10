@@ -37,6 +37,19 @@ routes:
       - 接着来
       - 进度
       - 下一个
+      - 完整知识点
+      - 全部知识点
+      - 全量
+      - 从零
+      - 小白
+      - 学习路线
+      - 备考地图
+      - 知识地图
+      - 深挖
+      - 专项
+      - 冲刺
+      - 自测
+      - 测试
 
   ai_classroom:
     keywords:
@@ -80,6 +93,54 @@ routes:
       - 仓库扫描
 
 subtypes:
+  full_knowledge_map:
+    keywords:
+      - 完整知识点
+      - 全部知识点
+      - 全量知识地图
+      - 全量
+      - 小白
+      - 从零准备
+      - 从零
+      - 岗位路线
+      - 学习路线
+      - 备考地图
+      - 知识地图
+      - 完整地图
+
+  focused_topic_pack:
+    keywords:
+      - 指定知识点
+      - 只准备
+      - 重点准备
+      - 深挖
+      - 专项
+      - 生成这个知识点
+      - 针对这些知识点
+      - 冲刺
+
+  jd_intake:
+    keywords:
+      - JD
+      - jd
+      - 岗位描述
+      - 招聘要求
+      - 职位要求
+      - 岗位要求
+      - job description
+      - 拆解JD
+      - 分析JD
+
+  session_resume:
+    keywords:
+      - 继续
+      - 恢复
+      - 接着来
+      - 上次做到哪了
+      - 进度
+      - 还差什么
+      - 下一个
+
   knowledge_point_card:
     keywords:
       - 搞懂
@@ -119,30 +180,13 @@ subtypes:
       - 包装
       - 项目
 
-  jd_intake:
+  quiz_card:
     keywords:
-      - JD
-      - jd
-      - 岗位描述
-      - 招聘要求
-      - 职位要求
-      - 岗位要求
-      - job description
-      - 面试准备路线
-      - 根据岗位准备
-      - 拆解JD
-      - 分析JD
-
-  session_resume:
-    keywords:
-      - 继续
-      - 恢复
-      - 接着来
-      - 上次做到哪了
-      - 进度
-      - 还差什么
-      - 下一个
-      - 继续 prepare
+      - 自测
+      - 测试题
+      - 自测题
+      - 考考我
+      - 闭卷
 
   pressure_question:
     keywords:
