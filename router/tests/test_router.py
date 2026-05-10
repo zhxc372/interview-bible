@@ -13,11 +13,57 @@ class TestInterviewBibleRouter(unittest.TestCase):
     def setUpClass(cls):
         cls.rules = load_rules(RULES)
 
-    def test_knowledge_card_routes_to_interview_bible(self):
-        d = decide("我要准备 MVCC 的面试知识卡", self.rules).to_dict()
+    # --- Knowledge Point Card ---
+
+    def test_knowledge_point_card_routes_correctly(self):
+        d = decide("我想搞懂 MVCC 是怎么回事", self.rules).to_dict()
         self.assertEqual(d["status"], "ok")
         self.assertEqual(d["route"], "interview_bible")
-        self.assertEqual(d["subtype"], "knowledge_card")
+        self.assertEqual(d["subtype"], "knowledge_point_card")
+
+    def test_knowledge_point_card_understand_keyword(self):
+        d = decide("帮我梳理一下 Redis 的知识点", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "knowledge_point_card")
+
+    def test_knowledge_point_card_cannot_explain(self):
+        d = decide("MVCC 我讲不清楚，帮我搞清楚", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "knowledge_point_card")
+
+    # --- Interview Card ---
+
+    def test_interview_card_routes_correctly(self):
+        d = decide("帮我准备 MVCC 的面试知识卡", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "interview_card")
+
+    def test_interview_card_2min_keyword(self):
+        d = decide("Redis 面试怎么讲", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "interview_card")
+
+    # --- Project Card ---
+
+    def test_project_card_routes_correctly(self):
+        d = decide("我要整理一个个人实验项目卡，项目是本地幂等提交 Demo，我有代码片段、测试日志和 README", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "project_card")
+
+    # --- Pressure Question ---
+
+    def test_pressure_question_routes_correctly(self):
+        d = decide("帮我生成压力追问", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "pressure_question")
+
+    # --- Blockers ---
 
     def test_classroom_routes_to_ai_classroom(self):
         d = decide("请根据教材错题帮我复述并批改", self.rules).to_dict()
@@ -48,12 +94,6 @@ class TestInterviewBibleRouter(unittest.TestCase):
         self.assertEqual(d["status"], "blocked")
         self.assertEqual(d["route"], "interview_bible")
         self.assertEqual(d["reason"], "missing_evidence")
-
-    def test_personal_demo_with_evidence_not_misclassified_as_production(self):
-        d = decide("我要整理一个个人实验项目卡，项目是本地幂等提交 Demo，我有代码片段、测试日志和 README", self.rules).to_dict()
-        self.assertEqual(d["status"], "ok")
-        self.assertEqual(d["route"], "interview_bible")
-        self.assertEqual(d["subtype"], "project_card")
 
     def test_interview_route_without_subtype_requires_manual_confirm(self):
         d = decide("我想准备技术面试", self.rules).to_dict()

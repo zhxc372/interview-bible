@@ -189,8 +189,8 @@ def match_routes(text: str, rules: Dict[str, Any]) -> List[str]:
 
 def match_subtype(text: str, rules: Dict[str, Any]) -> str | None:
     subtypes = rules.get("subtypes", {}) or {}
-    # Priority matters: explicit pressure request beats generic interview request.
-    for subtype in ("pressure_question", "knowledge_card", "project_card"):
+    # Priority matters: explicit pressure request > knowledge point > interview card > project card.
+    for subtype in ("pressure_question", "knowledge_point_card", "interview_card", "project_card"):
         cfg = subtypes.get(subtype, {})
         kws = cfg.get("keywords", []) if isinstance(cfg, dict) else []
         if contains_any(text, kws):
@@ -200,9 +200,10 @@ def match_subtype(text: str, rules: Dict[str, Any]) -> str | None:
 
 def prompt_path_for(subtype: str | None) -> str:
     mapping = {
-        "knowledge_card": "prompts/01-knowledge-card.prompt.md",
-        "project_card": "prompts/02-project-card.prompt.md",
-        "pressure_question": "prompts/03-pressure-q.prompt.md",
+        "knowledge_point_card": "prompts/01-knowledge-point-card.prompt.md",
+        "interview_card": "prompts/02-interview-card.prompt.md",
+        "project_card": "prompts/03-project-card.prompt.md",
+        "pressure_question": "prompts/04-pressure-q.prompt.md",
         "evidence_gap": "返回证据缺口清单，不加载生成 Prompt",
     }
     return mapping.get(subtype or "", "请人工确认后再加载 Prompt")

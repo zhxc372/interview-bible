@@ -13,6 +13,14 @@ routes:
       - 讲清楚
       - 包装
       - 表达卡
+      - 知识点卡
+      - 面试卡
+      - 搞懂
+      - 梳理
+      - 分清
+      - 学明白
+      - 理解
+      - 讲不清
 
   ai_classroom:
     keywords:
@@ -56,14 +64,30 @@ routes:
       - 仓库扫描
 
 subtypes:
-  knowledge_card:
+  knowledge_point_card:
     keywords:
+      - 搞懂
+      - 搞清楚
+      - 理解
+      - 梳理
+      - 分清
+      - 学明白
+      - 知识点卡
+      - 不懂
+      - 搞不清
+      - 讲不清
+
+  interview_card:
+    keywords:
+      - 面试卡
+      - 面试怎么讲
+      - 帮我准备回答
+      - 2分钟讲清
+      - 讲清楚
+      - 面试知识卡
       - 知识卡
-      - 知识点
       - 八股
-      - 机制
-      - 原理
-      - 概念
+      - 面试表达
 
   project_card:
     keywords:
