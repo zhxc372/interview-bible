@@ -69,6 +69,15 @@ v1.0    稳定发布                       🔜
 2. 配置文件（interview-bible.config.yaml）
 3. 更稳定的PDF引擎（评估Typst）
 
+### 多平台适配
+
+| 平台 | 适配方式 | 优先级 |
+|------|---------|--------
+| OpenClaw | ✅ 已适配（SKILL.md + Router） | 当前 |
+| 任意LLM（ChatGPT/Claude/Gemini） | 复制Prompt B直接使用 | v0.8 |
+| OpenCode | 转换skill格式 | v0.9 |
+| Cursor/Claude Code | 写入.cursorrules/CLAUDE.md | v0.9 |
+
 ---
 
 ## v1.0：稳定产品版本
