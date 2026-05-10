@@ -54,7 +54,9 @@ interview-bible/
 ├── router/
 │   ├── router.py               # 路由器
 │   ├── route_rules.yaml        # 路由规则
-│   └── tests/test_router.py    # 29个测试
+│   └── tests/test_router.py    # Router测试（29个）
+├── scripts/
+│   ├── tests/test_pipeline.py   # Pipeline E2E测试（7个）
 ├── prompts/                    # 8个Prompt（00-07）
 │   ├── 00-mode-router.prompt.md
 │   ├── 01-full-knowledge-map.prompt.md
