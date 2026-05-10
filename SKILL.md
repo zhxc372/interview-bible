@@ -51,19 +51,24 @@ Do not use this skill for:
 
 1. Route first.
 2. If blocked, return the blocker and ask for the next valid action.
-3. If routed to jd intake, use `prompts/00-jd-intake.prompt.md`.
-4. If routed to session resume, read `exports/` state.yaml to restore progress.
-5. If routed to knowledge point card, use `prompts/01-knowledge-point-card.prompt.md`.
-6. If routed to interview card, use `prompts/02-interview-card.prompt.md`.
-7. If routed to project card, use `prompts/03-project-card.prompt.md`.
-8. If routed to pressure question, use `prompts/04-pressure-q.prompt.md`.
-9. Every output must include a validation action and a stop condition.
-10. After generating a card, update `state.yaml` progress.
+3. If routed to mode router, use `prompts/00-mode-router.prompt.md`.
+4. If routed to full knowledge map, use `prompts/01-full-knowledge-map.prompt.md`.
+5. If routed to focused topic pack, use `prompts/02-focused-topic-pack.prompt.md`.
+6. If routed to knowledge point card, use `prompts/03-knowledge-point-card.prompt.md`.
+7. If routed to interview card, use `prompts/04-interview-card.prompt.md`.
+8. If routed to project card, use `prompts/05-project-card.prompt.md`.
+9. If routed to pressure question, use `prompts/06-pressure-q.prompt.md`.
+10. If routed to quiz card, use `prompts/07-quiz-card.prompt.md`.
+11. If routed to session resume, read `exports/` state.yaml to restore progress.
+12. Every output must include a validation action and a stop condition.
+13. After generating a card, update `state.yaml` progress.
+14. **PDF只能从标准session产物生成，禁止直接生成。**
+15. **禁止生成没有证据锚点的项目故事。**
 
 Suggested local router command:
 
 ```bash
-./router/ls-router.sh "我想搞懂 MVCC"
+python3 router/router.py "我想搞懂 MVCC"
 ```
 
 ## Card types

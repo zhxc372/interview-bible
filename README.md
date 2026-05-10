@@ -1,40 +1,44 @@
-# Interview Bible MVP
+# Interview Bible
 
-> 基于 Learning System v4.2 | [GitHub](https://github.com/zhxc372/interview-bible) | [Releases](https://github.com/zhxc372/interview-bible/releases)
+> 岗位面试材料编译器 | [GitHub](https://github.com/zhxc372/interview-bible) | [Releases](https://github.com/zhxc372/interview-bible/releases)
 
-一个面试表达训练工具包。
+**两条产品线：**
 
-它不是简历优化器，不是八股题库，不是模拟面试平台。它只做一件事：
+| 产品线 | 解决的问题 | 受众 |
+|--------|-----------|------|
+| **学习路线**（Prompt A） | 看到JD后该学什么 | 小白/转岗/零基础 |
+| **面试手册**（Prompt B） | 拿到JD后怎么准备面试 | 有基础/有面试机会 |
 
-> **搞清楚 → 讲清楚 → 验证清楚**
+当前聚焦：**面试手册（Prompt B）**
 
 ---
 
-## 核心模型
-
-Interview Bible 把面试准备拆成两层：
-
-| 卡片 | 目标 | 输出 | 使用时机 |
-|------|------|------|----------|
-| **JD解构卡** | 找方向 | 备考科目图谱(12类) + 知识点Backlog(P0/P1/P2) + 项目证据映射 | 拿到JD后 |
-| **知识点卡** | 搞清楚 | 5W1H(9问) + Node Fingerprint(9问) + 最小验证 | 学习、查漏 |
-| **面试卡** | 讲清楚 | 30秒版 + 2分钟版 + Trade-off + 易混边界 + 压力追问 | 面试前训练 |
-| **项目卡** | 讲清楚（项目） | 6字段 + 证据锚点 + 诚实表达建议 | 项目复盘 |
-| **压力追问** | 验证清楚 | 3个追问 + 空泛点 + 缺失证据 | 卡片之后 |
-
-闭环：
+## 核心闭环
 
 ```text
-JD输入（找方向）
-    ↓
-知识点卡（搞清楚）
-    ↓ 提取
-面试卡（讲清楚）
-    ↓ 口述
-压力追问（验证清楚）
-    ↓ 发现漏洞
-回填知识点卡（再搞清楚）
+JD输入
+  → Router路由
+  → JD Intake（分析JD，生成考点地图）
+  → Context Pack（压缩JD，后续不用原始JD）
+  → Topic Backlog（P0/P1/P2/P3优先级）
+  → 逐Topic生成卡片
+  → Validate（校验产物完整性）
+  → Markdown Pack（拼接完整手册）
+  → PDF（可打印）
 ```
+
+**硬约束：PDF只能从标准session产物生成，Agent不能绕过流水线。**
+
+---
+
+## 卡片类型
+
+| 卡片 | 目标 | 什么时候用 |
+|------|------|-----------|
+| 面试卡 | 讲清楚 | 每个P0/P1考点 |
+| 知识点卡 | 搞清楚 | 面试卡生成前的理解铺垫 |
+| 自测卡 | 验证 | 检查掌握程度 |
+| 项目卡 | 项目表达 | 有真实项目时 |
 
 ---
 
@@ -42,34 +46,43 @@ JD输入（找方向）
 
 ```text
 interview-bible/
-├── SKILL.md                    # OpenClaw Skill 入口
-├── README.md
-├── VERSION
-├── PRD.md                      # 产品需求文档
+├── SKILL.md                    # OpenClaw Skill入口
+├── VERSION                     # 当前版本
+├── CHANGELOG.md                # 版本历史
+├── contracts/
+│   └── handbook_artifact_contract.yaml  # 产物契约
 ├── router/
-│   ├── router.py               # 路由器（Python）
-│   ├── route_rules.yaml        # 路由规则（关键词词库）
-│   ├── ls-router.sh            # Shell 入口
-│   └── tests/
-│       └── test_router.py      # 13 个单元测试
-├── prompts/
-│   ├── 00-jd-intake.prompt.md             # JD解构 Prompt
-│   ├── 01-knowledge-point-card.prompt.md   # 知识点卡 Prompt
-│   ├── 02-interview-card.prompt.md         # 面试卡 Prompt
-│   ├── 03-project-card.prompt.md           # 项目表达卡 Prompt
-│   └── 04-pressure-q.prompt.md             # 压力追问 Prompt
-├── templates/
-│   ├── jd-analysis-card.md      # JD解构卡模板
-│   ├── knowledge-point-card.md  # 知识点卡模板
-│   ├── interview-card.md        # 面试卡模板
-│   └── project-card.md          # 项目卡模板
+│   ├── router.py               # 路由器
+│   ├── route_rules.yaml        # 路由规则
+│   └── tests/test_router.py    # 29个测试
+├── prompts/                    # 8个Prompt（00-07）
+│   ├── 00-mode-router.prompt.md
+│   ├── 01-full-knowledge-map.prompt.md
+│   ├── 02-focused-topic-pack.prompt.md
+│   ├── 03-knowledge-point-card.prompt.md
+│   ├── 04-interview-card.prompt.md
+│   ├── 05-project-card.prompt.md
+│   ├── 06-pressure-q.prompt.md
+│   └── 07-quiz-card.prompt.md
+├── scripts/
+│   ├── run_jd_to_handbook.py   # 总控脚本
+│   ├── validate_handbook.py    # 产物校验
+│   ├── build-book.py           # Markdown书籍生成
+│   ├── build-pdf-v2.py         # weasyprint PDF生成
+│   ├── build_context_pack.py
+│   ├── build_markdown_pack.py
+│   └── check_context_budget.py
+├── templates/                  # 输出模板
+├── legacy/                     # 已废弃的文件
 ├── examples/
-│   ├── example-mvcc.md
-│   ├── example-personal-demo.md
-│   ├── blocked-missing-evidence.json
-│   └── blocked-mixed-goals.json
-└── docs/
-    └── router-impl-notes.md
+│   ├── reference/              # 参考样例
+│   ├── sample-go-backend-jd.md
+│   └── sample-focused-topics.md
+├── docs/prd/                   # PRD文档
+│   ├── PRD-v0.6.md
+│   ├── Prompt-A-B-jd-learning-and-interview.md
+│   └── PRODUCT-DEFINITION.md
+└── exports/                    # 运行时输出（git-ignored）
 ```
 
 ---
@@ -77,36 +90,21 @@ interview-bible/
 ## 快速使用
 
 ```bash
-cd interview-bible
-chmod +x router/ls-router.sh
+# 1. 初始化session
+python3 scripts/run_jd_to_handbook.py --jd examples/sample-go-backend-jd.md --session my-interview --mode interview
 
-# 搞清楚：生成知识点卡
-./router/ls-router.sh "我想搞懂 MVCC"
+# 2. Agent执行JD Intake → 填充context_pack.yaml + topic_backlog.yaml
 
-# 讲清楚：生成面试卡
-./router/ls-router.sh "帮我准备 MVCC 的面试知识卡"
+# 3. Agent逐个生成卡片到 cards/ 目录
 
-# JD解构
-./router/ls-router.sh "帮我分析这个Go后端岗位JD"
+# 4. 校验产物
+python3 scripts/validate_handbook.py --session my-interview
 
-# 项目卡
-./router/ls-router.sh "我要整理一个个人实验项目卡，有代码和测试日志"
+# 5. 生成Markdown
+python3 scripts/build-book.py --session my-interview
 
-# 压力追问
-./router/ls-router.sh "帮我生成压力追问"
-```
-
-示例输出（知识点卡）：
-
-```json
-{
-  "status": "ok",
-  "route": "interview_bible",
-  "subtype": "knowledge_point_card",
-  "reason": "matched_single_route",
-  "message": "✅ 路由成功：interview_bible / knowledge_point_card",
-  "next_action": "加载 prompts/01-knowledge-point-card.prompt.md"
-}
+# 6. 生成PDF
+python3 scripts/build-pdf-v2.py --session my-interview
 ```
 
 ---
@@ -114,56 +112,8 @@ chmod +x router/ls-router.sh
 ## 跑测试
 
 ```bash
-python3 -m unittest router.tests.test_router
-```
-
-当前 19 个测试全部通过。
-
----
-
-## Router 拦截规则
-
-Router 先拦截再生成，5 种拦截场景：
-
-| 拦截原因 | 说明 |
-|----------|------|
-| `empty_input` | 空输入 |
-| `unclear_goal` | 没命中任何路由 |
-| `mixed_goals` | 同时命中多个路由 |
-| `missing_evidence` | 强成果表述 + 无证据锚点 |
-| `coding_agent_disabled_in_mvp` | 请求自动代码扫描 |
-| `subtype_unclear` | 命中 interview_bible 但不知道要哪种卡 |
-
----
-
-## Context Optimization
-
-v0.4 引入 Context Pack（编译中间层）+ State Persistence（状态持久化）。
-
-**最小上下文原则**：原始JD只进入JD Intake阶段，后续任务只读压缩后的context_pack.yaml。
-
-**状态持久化**：每个session的进度写入state.yaml，中断后说"继续"即可恢复。
-
-**Map-Reduce生成**：逐个知识点生成卡片（Map），最后用脚本拼接成Markdown包（Reduce）。
-
-```text
-JD → Context Pack → 逐Topic生成卡片 → 脚本拼接 → Markdown包
-```
-
-### 脚本工具
-
-```bash
-# 生成context pack
-python3 scripts/build_context_pack.py --session <session_id>
-
-# 恢复最新session
-python3 scripts/build_context_pack.py --session <session_id> --resume
-
-# 生成Markdown包（完整版/速记版/自测版）
-python3 scripts/build_markdown_pack.py --session <session_id>
-
-# 检查context budget
-python3 scripts/check_context_budget.py --session <session_id>
+python3 -m unittest discover
+# 29个测试全部通过
 ```
 
 ---
@@ -171,40 +121,24 @@ python3 scripts/check_context_budget.py --session <session_id>
 ## 核心铁律
 
 ```text
-面试要证据。
-项目要边界。
-知识要取舍。
-追问要暴露漏洞。
-无证据不生成项目卡。
-搞清楚再讲清楚。
+1. 面试要证据。无证据不生成项目卡。
+2. PDF只能从标准session产物生成。
+3. Agent不能绕过流水线。
+4. 项目故事不能编。没有真实项目就用"理论推演"。
+5. 搞清楚 → 讲清楚 → 验证清楚。
 ```
-
----
-
-## MVP 范围
-
-✅ 做：
-- Router 路由与拦截
-- 知识点卡（搞清楚）
-- 面试卡（讲清楚）
-- 项目表达卡
-- 压力追问
-- 3 个模板 + 2 个示例
-
-❌ 不做：
-- UI / 数据库 / 长期记忆
-- 完整模拟面试
-- 简历优化器 / 八股题库生成器
-- 自动代码仓库扫描
-- Anki 闪卡导出（未来考虑）
 
 ---
 
 ## 版本历史
 
-| 版本 | 日期 | 说明 |
-|------|------|------|
-| v0.1 | 2026-05-10 | MVP 初始版本：Router + 知识卡 + 项目卡 + 压力追问 |
-| v0.2 | 2026-05-10 | 双卡结构：知识点卡(搞清楚) + 面试卡(讲清楚)，13个测试 |
-| v0.3 | 2026-05-10 | JD Intake：JD解构卡 + 12类科目分类法 + 知识点Backlog，16个测试 |
-| v0.4 | 2026-05-10 | Context Pack + State Persistence + Markdown Pack生成器，19个测试 |
+| 版本 | 说明 |
+|------|------|
+| v0.1 | MVP骨架：Router + 知识卡 + 项目卡 |
+| v0.2 | 双卡结构：知识点卡 + 面试卡 |
+| v0.3 | JD Intake：输入JD生成备考地图 |
+| v0.4 | Context Pack + State Persistence |
+| v0.5 | 双模式 + Quiz Card + 用户画像 |
+| v0.5.1 | 用户画像层（应届/初级/转岗/自定义） |
+| v0.6 | weasyprint PDF导出 + 书籍排版 |
+| **v0.6.1** | **流程硬化：Artifact Contract + Validate + 总控脚本** |

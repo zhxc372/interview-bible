@@ -1,0 +1,66 @@
+# Handbook Artifact Contract v1.0
+# 面试手册产物契约 —— PDF只能从标准session产物生成
+
+session_required_files:
+  - raw_jd.md                    # 原始JD
+  - jd_analysis.md               # JD分析结果
+  - context_pack.yaml             # JD压缩后的上下文包
+  - topic_backlog.yaml            # 知识点优先级backlog
+  - state.yaml                    # 进度状态
+  - source_trace.md               # 来源追踪（每个考点从哪来）
+
+topic_required_files:
+  P0:
+    - knowledge-card.md           # 知识点卡（搞清楚）
+    - interview-card.md           # 面试卡（讲清楚）
+    - quiz-card.md                # 自测题（验证）
+    - validation.json             # 校验结果
+  P1:
+    - interview-card.md           # 面试卡
+    - quiz-card.md                # 自测题
+    - validation.json             # 校验结果
+  P2:
+    - interview-card.md           # 面试卡
+    - validation.json             # 校验结果
+
+global_required_files:
+  - markdown/interview_handbook.md   # 完整面试手册
+  - markdown/cram_pack.md            # 速记版
+  - markdown/quiz_pack.md            # 自测版
+  - pdf/interview_handbook.pdf       # 最终PDF
+
+forbidden:
+  - direct_prompt_to_pdf             # 禁止直接从prompt生成PDF
+  - project_story_without_evidence   # 禁止无证据的项目故事
+  - raw_jd_reused_after_intake       # 禁止intake后还用原始JD
+  - pdf_without_validation           # 禁止未校验就生成PDF
+
+evidence_policy:
+  strong_evidence:
+    - code snippet
+    - commit/PR/diff
+    - logs
+    - benchmark
+    - screenshot
+    - README
+    - reproducible demo
+  weak_evidence:
+    - "I optimized it"
+    - "I participated in design"
+    - "The performance improved"
+  no_evidence:
+    - 不允许生成"我之前做过/我负责/我主导"的项目故事
+    - 只能使用"理论推演"或"可替换模板"
+
+project_type_labels:
+  - 【商业生产】
+  - 【个人实验】
+  - 【开源贡献】
+  - 【课程作业】
+  - 【理论推演】
+
+accuracy_policy:
+  - 不允许太绝对的表述（如"支撑千万级"、"快百倍"）
+  - 技术说法要标注版本（如"Go 1.18+"）
+  - 同一张卡内部不能出现版本不一致的说明
+  - 推荐用"通常""常见""在很多场景下"等限定词
