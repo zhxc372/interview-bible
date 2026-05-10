@@ -27,7 +27,7 @@ def load_card(cards_dir: str, topic_id: str, card_type: str = "knowledge") -> st
         with open(card_path, "r", encoding="utf-8") as f:
             return f.read()
     else:
-        return f"\n# {topic_id}（本章待完善）\n\n目前内容还在补充中，欢迎提交PR！\n"
+        return None  # 缺卡返回None，由调用方决定是否报错
 
 
 def build_toc(topic_list: list[tuple[str, str]]) -> str:
@@ -108,20 +108,30 @@ def main(argv: list[str] | None = None) -> int:
     if not os.path.exists(session_dir):
         os.makedirs(session_dir, exist_ok=True)
 
-    # 小白版Go后端主题（对应你的JD）
-    topics = [
-        ("go-concurrency", "Go并发：goroutine/channel/CSP模型"),
-        ("go-context", "Go context：传值、超时、取消"),
-        ("go-framework", "Go框架：Gin/go-restapi"),
-        ("mysql-basics", "MySQL：索引、事务、隔离级别"),
-        ("docker-k8s", "云原生：Docker/Kubernetes"),
-    ]
+    # 读取topic_backlog.yaml，不硬编码
+    backlog_path = os.path.join(session_dir, "topic_backlog.yaml")
+    if not os.path.exists(backlog_path):
+        print(f"❌ topic_backlog.yaml 不存在：{backlog_path}")
+        print("   请先运行 JD Intake 生成 topic_backlog.yaml")
+        return 1
+
+    import yaml
+    with open(backlog_path, "r", encoding="utf-8") as f:
+        backlog = yaml.safe_load(f) or {}
+
+    topics_raw = backlog.get("topics", [])
+    if not topics_raw:
+        print("❌ topic_backlog.yaml 中 topics 为空")
+        print("   请先运行 JD Intake 填充 topic 列表")
+        return 1
+
+    topics = [(t["id"], t["name"]) for t in topics_raw]
 
     markdown_dir = os.path.join(session_dir, "markdown")
     os.makedirs(markdown_dir, exist_ok=True)
 
-    # 生成完整的书
-    full_path = os.path.join(markdown_dir, f"{args.session}-小白版面试手册.md")
+    # 输出contract标准命名
+    full_path = os.path.join(markdown_dir, "interview_handbook.md")
     full_content = build_full_book(args.session, topics)
     with open(full_path, "w", encoding="utf-8") as f:
         f.write(full_content)

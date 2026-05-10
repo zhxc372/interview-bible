@@ -16,6 +16,7 @@
 | v0.5.1 | 用户画像层 | ✅ 完成 |
 | v0.6 | Print Pack + weasyprint PDF导出 | ✅ 完成 |
 | v0.6.1 | **流程硬化：Artifact Contract + Validate + 总控脚本** | ✅ 完成 |
+| v0.6.2 | **工程硬化：PDF强制校验 + backlog驱动 + E2E测试** | ✅ 完成 |
 | v0.7 | Prompt A/B双产品线整合 + Typst排版 | 🔜 |
 | v0.8 | Mock Interview模拟面试 | 🔜 |
 
@@ -65,3 +66,22 @@
 - **Prompt A**：JD驱动学习路线生成器（小白看JD该学什么）
 - **Prompt B**：JD驱动面试手册生成器（有基础的人怎么准备面试）
 - 两条产品线文档：`docs/prd/Prompt-A-B-jd-learning-and-interview.md`
+
+## v0.6.2 - 工程硬化 (2026-05-11)
+
+> 核心变更：**让绕过流程在工程上失败，而不只是文档禁止。**
+
+### 新增
+- `requirements.txt` — 依赖说明
+- `scripts/tests/test_pipeline.py` — 7个E2E测试（无直达prompt/空backlog/假项目故事/PDF强制校验）
+
+### 修复
+- `build-pdf-v2.py` — 默认强制校验，只读`interview_handbook.md`，需`--force`跳过
+- `build-book.py` — 从`topic_backlog.yaml`读取topic，不再硬编码Go后端
+- `validate_handbook.py` — 检查空backlog、至少1个P0/P1、validation.json状态、扩展假故事正则
+- 清理prompts/目录旧版重复文件（删除6个）
+
+### 测试
+- Router: 29个测试
+- Pipeline: 7个测试
+- **总计: 36个测试全通过**

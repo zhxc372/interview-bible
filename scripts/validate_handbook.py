@@ -53,8 +53,13 @@ def check_no_fake_project_stories(dir_path: str, errors: list):
         r"我之前做过",
         r"我之前负责",
         r"我主导了",
+        r"我负责了",
+        r"我做了",
+        r"我落地了",
+        r"我优化了",
         r"优化到\d+[%.]",
         r"提升了\d+[%.]",
+        r"我们落地了",
     ]
     for root, dirs, files in os.walk(dir_path):
         for f in files:
@@ -116,22 +121,41 @@ def validate_session(session: str) -> list[str]:
 
     # 2. 检查topic级必需文件
     cards_dir = os.path.join(session_dir, "cards")
-    if os.path.exists(cards_dir):
-        # 从topic_backlog.yaml读取优先级
-        backlog_path = os.path.join(session_dir, "topic_backlog.yaml")
-        if os.path.exists(backlog_path):
-            with open(backlog_path, "r", encoding="utf-8") as f:
-                backlog = yaml.safe_load(f) or {}
-            topics = backlog.get("topics", [])
-            for topic in topics:
-                topic_id = topic.get("id", "")
-                priority = topic.get("priority", "P2")
-                topic_dir = os.path.join(cards_dir, topic_id)
+    backlog_path = os.path.join(session_dir, "topic_backlog.yaml")
+    if os.path.exists(backlog_path):
+        with open(backlog_path, "r", encoding="utf-8") as f:
+            backlog = yaml.safe_load(f) or {}
+        topics = backlog.get("topics", [])
 
-                if priority in ("P0", "P1"):
-                    topic_required = contract.get("topic_required_files", {}).get(priority, [])
-                    for f in topic_required:
-                        check_file(os.path.join(topic_dir, f), errors, required=True)
+        # 2a. topics不能为空
+        if not topics:
+            errors.append("❌ FAIL: topic_backlog.yaml 中 topics 为空，请先运行 JD Intake")
+
+        # 2b. 至少1个P0或P1
+        p0_p1 = [t for t in topics if t.get("priority") in ("P0", "P1")]
+        if not p0_p1 and topics:
+            errors.append("⚠️  WARN: topic_backlog.yaml 中没有 P0 或 P1 topic，面试手册可能缺少核心考点")
+
+        # 2c. 检查每个P0/P1的必需文件
+        for topic in topics:
+            topic_id = topic.get("id", "")
+            priority = topic.get("priority", "P2")
+            topic_dir = os.path.join(cards_dir, topic_id)
+
+            if priority in ("P0", "P1"):
+                topic_required = contract.get("topic_required_files", {}).get(priority, [])
+                for f in topic_required:
+                    check_file(os.path.join(topic_dir, f), errors, required=True)
+
+                # 检查validation.json状态
+                val_path = os.path.join(topic_dir, "validation.json")
+                if os.path.exists(val_path):
+                    with open(val_path, "r", encoding="utf-8") as vf:
+                        val = json.load(vf)
+                    if val.get("status") != "pass":
+                        errors.append(f"❌ FAIL: {topic_id}/validation.json status={val.get('status', 'unknown')}，需要 pass")
+    else:
+        errors.append("❌ FAIL: topic_backlog.yaml 不存在")
 
     # 3. 检查无证据项目故事
     check_no_fake_project_stories(session_dir, errors)

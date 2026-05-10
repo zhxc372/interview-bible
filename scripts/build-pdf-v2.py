@@ -262,6 +262,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build PDF v2（weasyprint + 代码高亮）")
     parser.add_argument("--session", required=True, help="会话目录名")
     parser.add_argument("--input", help="指定输入md文件名")
+    parser.add_argument("--force", action="store_true", help="跳过校验（仅开发用）")
     args = parser.parse_args(argv)
 
     session_dir = os.path.join(EXPORTS_DIR, args.session)
@@ -269,25 +270,33 @@ def main(argv: list[str] | None = None) -> int:
     pdf_dir = os.path.join(session_dir, "pdf")
     os.makedirs(pdf_dir, exist_ok=True)
 
-    # 找输入文件
+    # 强制校验（除非--force）
+    if not args.force:
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+        from validate_handbook import validate_session
+        errors = validate_session(args.session)
+        fails = [e for e in errors if e.startswith("❌")]
+        if fails:
+            print("❌ 校验未通过，拒绝生成PDF。使用 --force 跳过校验（仅开发用）")
+            return 1
+        print("✅ 校验通过")
+
+    # 找输入文件：优先contract标准命名
     if args.input:
         md_path = os.path.join(markdown_dir, args.input)
     else:
-        candidates = [f for f in os.listdir(markdown_dir) if f.endswith("面试手册.md")]
-        if not candidates:
-            candidates = [f for f in os.listdir(markdown_dir) if "完整" in f]
-        if not candidates:
-            print("❌ 找不到markdown文件")
+        # Contract标准命名
+        md_path = os.path.join(markdown_dir, "interview_handbook.md")
+        if not os.path.exists(md_path):
+            print("❌ 找不到 markdown/interview_handbook.md")
+            print("   请先用 build_markdown_pack.py 生成标准产物")
             return 1
-        md_path = os.path.join(markdown_dir, candidates[0])
 
     if not os.path.exists(md_path):
         print(f"❌ 文件不存在：{md_path}")
         return 1
 
-    md_filename = os.path.basename(md_path)
-    pdf_filename = md_filename.replace(".md", ".pdf")
-    pdf_path = os.path.join(pdf_dir, pdf_filename)
+    pdf_path = os.path.join(pdf_dir, "interview_handbook.pdf")
 
     md_to_pdf(md_path, pdf_path)
     return 0
