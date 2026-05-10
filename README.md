@@ -13,6 +13,17 @@
 
 ---
 
+## 项目宪法
+
+本项目受 [PROJECT_CONSTITUTION.md](PROJECT_CONSTITUTION.md) 最高约束。
+
+核心使命：**帮用户把真实能力转化为可验证、可口述、可追问的面试表达。**
+
+所有工作流必须遵守 [PROJECT_CONSTITUTION.md](PROJECT_CONSTITUTION.md) 和 [DECISION_RIGHTS.md](DECISION_RIGHTS.md)。
+任何违反宪法的行为（无证据生成项目卡、绕过流水线直接生成PDF、包装个人demo为生产项目）都会被blocker拦截。
+
+---
+
 ## 核心闭环
 
 ```text
@@ -134,6 +145,8 @@ python3 scripts/tests/test_pipeline.py -v
 4. 项目故事不能编。没有真实项目就用"理论推演"。
 5. 搞清楚 → 讲清楚 → 验证清楚。
 ```
+
+**以上铁律来源于 [PROJECT_CONSTITUTION.md](PROJECT_CONSTITUTION.md)。宪法是最高约束，任何prompt/route/export不能违反。**
 
 ---
 

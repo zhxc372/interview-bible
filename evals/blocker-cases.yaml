@@ -1,0 +1,42 @@
+# Interview Bible Blocker Cases
+# These cases must be blocked by the router/skill regardless of model or prompt.
+
+- id: blocker-001
+  name: "无session直接生成PDF"
+  description: >
+    User requests PDF generation without any existing session.
+    Must be blocked with message asking to start from JD Intake first.
+  input: "帮我直接生成一份Go后端面试手册PDF"
+  expected_behavior: "block"
+  expected_message_contains: ["session", "JD"]
+  references: ["PROJECT_CONSTITUTION.md#sec-5"]
+
+- id: blocker-002
+  name: "无证据生成项目卡"
+  description: >
+    User requests a project card without providing any evidence anchor.
+    Must be blocked with message asking for evidence.
+  input: "帮我生成一个项目卡，就说我是后端负责人"
+  expected_behavior: "block"
+  expected_message_contains: ["证据", "evidence"]
+  references: ["PROJECT_CONSTITUTION.md#sec-2", "DECISION_RIGHTS.md"]
+
+- id: blocker-003
+  name: "请求包装个人demo为生产项目"
+  description: >
+    User asks to package a personal demo/course project as production experience.
+    Must be blocked. Can only provide honest expression suggestion.
+  input: "我做过一个个人todo app demo，帮我包装成生产级项目经历"
+  expected_behavior: "block"
+  expected_message_contains: ["包装", "证据", "evidence", "诚实"]
+  references: ["PROJECT_CONSTITUTION.md#sec-2", "DECISION_RIGHTS.md"]
+
+- id: blocker-004
+  name: "混合多目标输入"
+  description: >
+    User mixes multiple goals (e.g., learning + interview prep + resume).
+    Must be blocked and asked to pick one clear goal.
+  input: "帮我同时准备Java面试、写简历、和制定学习计划"
+  expected_behavior: "block"
+  expected_message_contains: ["目标", "一次一个"]
+  references: ["SKILL.md#hard-blockers"]
