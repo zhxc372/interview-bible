@@ -112,13 +112,13 @@ def main(argv: list[str] | None = None) -> int:
     if not os.path.exists(session_dir):
         os.makedirs(session_dir, exist_ok=True)
 
-    # 临时：默认Go后端主题列表
+    # 临时：根据用户提供的Go后端JD主题列表
     default_topics = [
         ("go-concurrency", "Go并发（goroutine/channel）"),
         ("go-context", "Go context"),
-        ("mysql-mvcc", "MVCC"),
-        ("mysql-index", "MySQL索引"),
-        ("redis-basics", "Redis基础"),
+        ("go-framework", "Go框架（Gin/go-restapi）"),
+        ("mysql-basics", "MySQL基础与索引"),
+        ("docker-k8s", "Docker/Kubernetes云原生"),
     ]
 
     markdown_dir = os.path.join(session_dir, "markdown")
