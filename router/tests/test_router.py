@@ -55,6 +55,26 @@ class TestInterviewBibleRouter(unittest.TestCase):
         self.assertEqual(d["route"], "interview_bible")
         self.assertEqual(d["subtype"], "project_card")
 
+    # --- JD Intake ---
+
+    def test_jd_intake_routes_correctly(self):
+        d = decide("这是一个 Go 后端岗位 JD，帮我拆解面试准备科目", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "jd_intake")
+
+    def test_jd_intake_job_description_keyword(self):
+        d = decide("帮我分析这个岗位要求", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "jd_intake")
+
+    def test_jd_intake_prepare_route_keyword(self):
+        d = decide("根据这个招聘要求帮我准备面试准备路线", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["route"], "interview_bible")
+        self.assertEqual(d["subtype"], "jd_intake")
+
     # --- Pressure Question ---
 
     def test_pressure_question_routes_correctly(self):

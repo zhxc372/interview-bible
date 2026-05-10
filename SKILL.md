@@ -25,6 +25,7 @@ Core rules:
 
 Use this skill when the user asks for any of the following:
 
+- JD输入 / 岗位描述 / 招聘要求 → **JD解构卡**
 - 搞懂 / 搞清楚 / 梳理 / 分清 / 学明白一个知识点 → **知识点卡**
 - 面试怎么讲 / 2分钟讲清 / 帮我准备回答 → **面试卡**
 - 项目表达卡 / 项目复盘 → **项目卡**
@@ -49,11 +50,12 @@ Do not use this skill for:
 
 1. Route first.
 2. If blocked, return the blocker and ask for the next valid action.
-3. If routed to knowledge point card, use `prompts/01-knowledge-point-card.prompt.md`.
-4. If routed to interview card, use `prompts/02-interview-card.prompt.md`.
-5. If routed to project card, use `prompts/03-project-card.prompt.md`.
-6. If routed to pressure question, use `prompts/04-pressure-q.prompt.md`.
-7. Every output must include a validation action and a stop condition.
+3. If routed to jd intake, use `prompts/00-jd-intake.prompt.md`.
+4. If routed to knowledge point card, use `prompts/01-knowledge-point-card.prompt.md`.
+5. If routed to interview card, use `prompts/02-interview-card.prompt.md`.
+6. If routed to project card, use `prompts/03-project-card.prompt.md`.
+7. If routed to pressure question, use `prompts/04-pressure-q.prompt.md`.
+8. Every output must include a validation action and a stop condition.
 
 Suggested local router command:
 
@@ -65,6 +67,7 @@ Suggested local router command:
 
 | 卡片 | 目标 | 输出 | 使用时机 |
 |------|------|------|----------|
+| JD解构卡 | 找方向 | 备考科目图谱 + 知识点Backlog + 项目证据映射 | 拿到JD后 |
 | 知识点卡 | 搞清楚 | 5W1H + Node Fingerprint + 最小验证 | 学习、查漏 |
 | 面试卡 | 讲清楚 | 30秒版 + 2分钟版 + Trade-off + 易混边界 + 压力追问 | 面试前训练 |
 | 项目卡 | 讲清楚（项目） | 6字段 + 证据锚点 + 诚实表达建议 | 项目复盘 |
@@ -73,6 +76,8 @@ Suggested local router command:
 ## Closed loop
 
 ```text
+JD输入（找方向）
+    ↓
 知识点卡（搞清楚）
     ↓ 提取
 面试卡（讲清楚）

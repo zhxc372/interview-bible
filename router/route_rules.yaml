@@ -21,6 +21,17 @@ routes:
       - 学明白
       - 理解
       - 讲不清
+      - JD
+      - jd
+      - 岗位描述
+      - 招聘要求
+      - 职位要求
+      - 岗位要求
+      - job description
+      - 面试准备路线
+      - 根据岗位准备
+      - 拆解
+      - 分析
 
   ai_classroom:
     keywords:
@@ -102,6 +113,20 @@ subtypes:
       - 课程作业
       - 包装
       - 项目
+
+  jd_intake:
+    keywords:
+      - JD
+      - jd
+      - 岗位描述
+      - 招聘要求
+      - 职位要求
+      - 岗位要求
+      - job description
+      - 面试准备路线
+      - 根据岗位准备
+      - 拆解JD
+      - 分析JD
 
   pressure_question:
     keywords:

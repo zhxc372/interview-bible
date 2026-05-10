@@ -16,6 +16,7 @@ Interview Bible 把面试准备拆成两层：
 
 | 卡片 | 目标 | 输出 | 使用时机 |
 |------|------|------|----------|
+| **JD解构卡** | 找方向 | 备考科目图谱(12类) + 知识点Backlog(P0/P1/P2) + 项目证据映射 | 拿到JD后 |
 | **知识点卡** | 搞清楚 | 5W1H(9问) + Node Fingerprint(9问) + 最小验证 | 学习、查漏 |
 | **面试卡** | 讲清楚 | 30秒版 + 2分钟版 + Trade-off + 易混边界 + 压力追问 | 面试前训练 |
 | **项目卡** | 讲清楚（项目） | 6字段 + 证据锚点 + 诚实表达建议 | 项目复盘 |
@@ -24,6 +25,8 @@ Interview Bible 把面试准备拆成两层：
 闭环：
 
 ```text
+JD输入（找方向）
+    ↓
 知识点卡（搞清楚）
     ↓ 提取
 面试卡（讲清楚）
@@ -50,11 +53,13 @@ interview-bible/
 │   └── tests/
 │       └── test_router.py      # 13 个单元测试
 ├── prompts/
+│   ├── 00-jd-intake.prompt.md             # JD解构 Prompt
 │   ├── 01-knowledge-point-card.prompt.md   # 知识点卡 Prompt
 │   ├── 02-interview-card.prompt.md         # 面试卡 Prompt
 │   ├── 03-project-card.prompt.md           # 项目表达卡 Prompt
 │   └── 04-pressure-q.prompt.md             # 压力追问 Prompt
 ├── templates/
+│   ├── jd-analysis-card.md      # JD解构卡模板
 │   ├── knowledge-point-card.md  # 知识点卡模板
 │   ├── interview-card.md        # 面试卡模板
 │   └── project-card.md          # 项目卡模板
@@ -80,6 +85,9 @@ chmod +x router/ls-router.sh
 
 # 讲清楚：生成面试卡
 ./router/ls-router.sh "帮我准备 MVCC 的面试知识卡"
+
+# JD解构
+./router/ls-router.sh "帮我分析这个Go后端岗位JD"
 
 # 项目卡
 ./router/ls-router.sh "我要整理一个个人实验项目卡，有代码和测试日志"
@@ -109,7 +117,7 @@ chmod +x router/ls-router.sh
 python3 -m unittest router.tests.test_router
 ```
 
-当前 13 个测试全部通过。
+当前 16 个测试全部通过。
 
 ---
 
@@ -166,3 +174,4 @@ Router 先拦截再生成，5 种拦截场景：
 |------|------|------|
 | v0.1 | 2026-05-10 | MVP 初始版本：Router + 知识卡 + 项目卡 + 压力追问 |
 | v0.2 | 2026-05-10 | 双卡结构：知识点卡(搞清楚) + 面试卡(讲清楚)，13个测试 |
+| v0.3 | 2026-05-10 | JD Intake：JD解构卡 + 12类科目分类法 + 知识点Backlog，16个测试 |
