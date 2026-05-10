@@ -22,7 +22,17 @@ class TestInterviewBibleRouter(unittest.TestCase):
         self.assertEqual(d["subtype"], "full_knowledge_map")
 
     def test_full_knowledge_map_beginner(self):
-        d = decide("我是小白，帮我生成Go后端的备考地图", self.rules).to_dict()
+        d = decide("我是初学者，帮我生成Go后端的备考地图", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["subtype"], "full_knowledge_map")
+
+    def test_full_knowledge_map_fresh_grad(self):
+        d = decide("我是应届生，帮我准备Go后端的完整知识点地图", self.rules).to_dict()
+        self.assertEqual(d["status"], "ok")
+        self.assertEqual(d["subtype"], "full_knowledge_map")
+
+    def test_full_knowledge_map_career_change(self):
+        d = decide("我之前写Java的，现在转Go，帮我从零准备", self.rules).to_dict()
         self.assertEqual(d["status"], "ok")
         self.assertEqual(d["subtype"], "full_knowledge_map")
 
