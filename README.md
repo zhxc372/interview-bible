@@ -112,8 +112,13 @@ python3 scripts/build-pdf-v2.py --session my-interview
 ## 跑测试
 
 ```bash
-python3 -m unittest discover
-# 29个测试全部通过
+# Router测试
+python3 -m unittest router.tests.test_router -v
+
+# Pipeline E2E测试
+python3 scripts/tests/test_pipeline.py -v
+
+# 总计：36个测试（29 Router + 7 Pipeline）
 ```
 
 ---
@@ -122,8 +127,8 @@ python3 -m unittest discover
 
 ```text
 1. 面试要证据。无证据不生成项目卡。
-2. PDF只能从标准session产物生成。
-3. Agent不能绕过流水线。
+2. PDF只能从标准session产物生成，build-pdf-v2默认强制校验。
+3. Agent不能绕过流水线——工程上不可绕过（测试保证）。
 4. 项目故事不能编。没有真实项目就用"理论推演"。
 5. 搞清楚 → 讲清楚 → 验证清楚。
 ```
@@ -142,3 +147,4 @@ python3 -m unittest discover
 | v0.5.1 | 用户画像层（应届/初级/转岗/自定义） |
 | v0.6 | weasyprint PDF导出 + 书籍排版 |
 | **v0.6.1** | **流程硬化：Artifact Contract + Validate + 总控脚本** |
+| **v0.6.2** | **工程硬化：PDF强制校验 + backlog驱动 + E2E测试（36个）** |
